@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="821fc465-8909-4906-a4ca-ccfb26b2b5be" name="timproducts.timproducts.lu" url="http://timproducts.timproducts.lu">
+        <fileTransfer rootFolder="/htdocs" host="host1.globe.lu" port="21">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" showHiddenFiles="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

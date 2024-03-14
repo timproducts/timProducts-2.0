@@ -1,0 +1,47 @@
+<?php
+//$sql = '
+//SELECT invoice.ID AS invoiceID, invoice.date, invoice.time, SUM(invoice_has_item.calculated) AS price, GROUP_CONCAT(CONCAT(item.item, " [", invoice_has_item.price, "]")) AS items, supplier.ID AS supplierID, supplier.supplier /*GROUP_CONCAT(tag.tag) AS tags*/
+//FROM invoice
+//    LEFT JOIN supplier ON invoice.fiSupplier = supplier.ID
+//    LEFT JOIN invoice_has_item ON invoice_has_item.fiInvoice = invoice.ID
+//    LEFT JOIN item ON invoice_has_item.fiItem = item.ID
+//    /*
+//    LEFT JOIN tagging ON tagging.fiEntity = invoice_has_item.ID
+//    LEFT JOIN tag ON tag.ID = tagging.fiTag
+//    */
+//WHERE invoice.ID > 10
+//GROUP BY invoice.ID;';
+//$query = $site->db->prepare($sql);
+////$query->bindValue($key, $value);
+//$query->execute();
+////var_dump($query->fetchAll());
+?>
+<table border="1">
+	<caption>Invoice</caption>
+	<thead>
+	<tr>
+		<th>Date</th>
+		<th>Time</th>
+		<th>Supplier</th>
+		<th>Price</th>
+<!--		<th>Tag</th>-->
+		<th>Item(s)</th>
+	</tr>
+	</thead>
+	<tbody>
+	<?php
+	foreach($query->fetchAll() as $invoice) {
+		?>
+		<tr>
+			<td><?=$invoice['date']?></td>
+			<td><?=$invoice['time']?></td>
+			<td><?=$invoice['supplier']?></td>
+			<td><?=formatPrice($invoice['price'])?></td>
+<!--			<td>--><?php //=$invoice['tags']?><!--</td>-->
+			<td><?=$invoice['items']?></td>
+		</tr>
+		<?php
+	}
+	?>
+	</tbody>
+</table>
