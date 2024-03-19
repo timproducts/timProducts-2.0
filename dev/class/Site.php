@@ -200,44 +200,73 @@ class Site {
 		}
 	}
 	
-	public function getURL2(bool $universe, bool $module, bool $view, array $param = []) {
+	/**
+	 * getURL
+	 *
+	 * @param bool $universe Universe Mask
+	 * @param bool $module Module Mask
+	 * @param bool $view View Mask
+	 * @param array $param additional Parameter(s)
+	 * @return string
+	 */
+	public function getURL(bool $universe, bool $module, bool $view, array $param = []) {
+		// Default Return
 		$return = $_SERVER['SCRIPT_NAME'];
+		// Default Parameters
 		$parameters = [];
 		
-		if($module && !is_null($this->module)) {
-			$parameters['module'] = 'module='.$this->module->ID;
-		}
-		
+		// Universe Parameter
 		if($universe && !is_null($this->universe)) {
-			$parameters['universe'] = 'universe='.$this->universe->ID;
+			// set Universe Parameter
+			$parameters[$this->universeParameterName] = $this->universeParameterName.'='.$this->universe->ID;
 		}
 		
+		// Module Parameter
+		if($module && !is_null($this->module)) {
+			// set Module Parameter
+			$parameters[$this->moduleParameterName] = $this->moduleParameterName.'='.$this->module->ID;
+		}
+		
+		// View Parameter
 		if($view && !is_null($this->view)) {
-			$parameters['view'] = 'view='.$this->view;
+			// set View Parameter
+			$parameters[$this->viewParameterName] = $this->viewParameterName.'='.$this->view;
 		}
 		
+		// Token Parameter
 		if(!is_null($this->token)) {
-			$parameters['auth_token'] = 'auth_token='.$this->token;
+			// set Token Parameter
+			$parameters[$this->authenticationBypassTokenParameterName] = $this->authenticationBypassTokenParameterName.'='.$this->token;
 		}
 		
+		// Additional Parameter(s)
 		foreach($param as $key => $value) {
+			// set Additional Parameter
 			$parameters[$key] = $key.'='.$value;
 		}
 		
 		$tmp = [];
-		$sequence = ['view', 'module', 'universe'];
+		// Parameter Sequence
+		$sequence = [$this->viewParameterName, $this->moduleParameterName, $this->universeParameterName];
+		// go through the Parameters
 		foreach($sequence as $check) {
+			// check for Parameter
 			if(isset($parameters[$check])) {
+				// set Parameter
 				$tmp[] = $parameters[$check];
+				// delete Parameter
 				unset($parameters[$check]);
 			}
 		}
 		
+		// go through the remaining Parameters
 		foreach($parameters as $parameter) {
+			// set Parameter
 			$tmp[] = $parameter;
 		}
 		
 		if(count($tmp) > 0) {
+			// format Parameters in Array Format to URL Format
 			$return = $return.'?'.implode('&', $tmp);
 		}
 		
