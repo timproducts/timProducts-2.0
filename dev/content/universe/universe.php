@@ -29,8 +29,8 @@ if(isset($site)) {
 			?>
 			<tr>
 				<td><?=$universe['ID']?></td>
-				<td><a href="<?=$site->getURL2(TRUE, TRUE, TRUE, ['universe' => $universe['ID']])?>"><?=$universe['universe']?></a></td>
-				<td><?=$site->getURL2(TRUE, TRUE, TRUE, ['universe' => $universe['ID']])?></td>
+				<td><a href="<?=$site->getURL(TRUE, TRUE, TRUE, [$site->universeParameterName => $universe['ID']])?>"><?=$universe['universe']?></a></td>
+				<td><?=$site->getURL(TRUE, TRUE, TRUE, [$site->universeParameterName => $universe['ID']])?></td>
 			</tr>
 			<?php
 		}

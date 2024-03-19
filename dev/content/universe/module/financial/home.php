@@ -49,7 +49,7 @@ if(isset($site)) {
 			$accounts = $query->fetchAll();
 			?>
 			<form method="post"
-				  action="<?=$site->getURL2(TRUE, TRUE, FALSE)?>">
+				  action="<?=$site->getURL(TRUE, TRUE, FALSE)?>">
 				<table border="1">
 					<caption>add Transaction</caption>
 					<thead>
@@ -159,7 +159,7 @@ if(isset($site)) {
 		?>
 		</tbody>
 	</table>
-	<a href="<?=$site->getURL2(TRUE, TRUE, TRUE, ['view' => 'addTransaction'])?>">add Transaction</a>
+	<a href="<?=$site->getURL(TRUE, TRUE, TRUE, [$site->viewParameterName => 'addTransaction'])?>">add Transaction</a>
 	
 	<style type="text/css">
 		.transaction td:nth-child(2) {

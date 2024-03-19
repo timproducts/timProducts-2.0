@@ -26,8 +26,8 @@ if(isset($site)) {
 			
 			?>
 			<tr>
-				<td><a href="<?=$site->getURL2(TRUE, TRUE, TRUE, ['module' => $module['ID']])?>"><?=$module['module']?></a></td>
-				<td><?=$site->getURL2(TRUE, TRUE, TRUE, ['module' => $module['ID']])?></td>
+				<td><a href="<?=$site->getURL(TRUE, TRUE, TRUE, [$site->moduleParameterName => $module['ID']])?>"><?=$module['module']?></a></td>
+				<td><?=$site->getURL(TRUE, TRUE, TRUE, [$site->moduleParameterName => $module['ID']])?></td>
 			</tr>
 			<?php
 		}
