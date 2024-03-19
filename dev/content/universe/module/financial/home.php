@@ -126,7 +126,7 @@ if(isset($site)) {
 	// between last 25. and this Month
 	// (YEAR(date) = YEAR(CURRENT_DATE - INTERVAL 1 MONTH) AND MONTH(date) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH) AND DAY(date) > 25) OR (YEAR(date) = YEAR(CURRENT_DATE) AND MONTH(date) = MONTH(CURRENT_DATE))
 	$sql = '
-	SELECT financial_account.ID, financial_account.account, SUM(financial_account_transaction.value) AS \'value\', SUM(financial_account_transaction.debit) AS \'debit\', SUM(financial_account_transaction.credit) AS \'credit\'
+	SELECT financial_account.ID, financial_account.account, SUM(financial_account_transaction.value) AS \'value\', SUM(financial_account_transaction.IN) AS \'IN\', SUM(financial_account_transaction.OUT) AS \'OUT\'
 	FROM financial_account
 		LEFT JOIN financial_account_transaction ON financial_account_transaction.fiAccount = financial_account.ID
 	WHERE financial_account.fiModule = :module GROUP BY financial_account.ID ';
@@ -140,8 +140,8 @@ if(isset($site)) {
 		<tr>
 			<th>Account</th>
 			<th>Value</th>
-			<th>Debit</th>
-			<th>Credit</th>
+			<th>IN</th>
+			<th>OUT</th>
 		</tr>
 		</thead>
 		<tbody>
@@ -151,8 +151,8 @@ if(isset($site)) {
 			<tr>
 				<td><?=$account['account']?></td>
 				<td><?=formatPrice($account['value'])?></td>
-				<td><?=formatPrice($account['debit'])?></td>
-				<td><?=formatPrice($account['credit'])?></td>
+				<td><?=formatPrice($account['IN'])?></td>
+				<td><?=formatPrice($account['OUT'])?></td>
 			</tr>
 			<?php
 		}
@@ -202,8 +202,8 @@ if(isset($site)) {
 			<thead>
 			<tr>
 				<th>Date</th>
-				<th>Debit</th>
-				<th>Credit</th>
+				<th>IN</th>
+				<th>OUT</th>
 				<th>From/To</th>
 				<th>Description</th>
 				<th>Comment</th>
@@ -215,8 +215,8 @@ if(isset($site)) {
 				?>
 				<tr>
 					<td><?=$transaction['date']?></td>
-					<td><?=formatPrice($transaction['debit'])?></td>
-					<td><?=formatPrice($transaction['credit'])?></td>
+					<td><?=formatPrice($transaction['IN'])?></td>
+					<td><?=formatPrice($transaction['OUT'])?></td>
 					<td><?=$transaction['fromto']?></td>
 					<td><?=$transaction['description']?></td>
 					<td><?=$transaction['comment']?></td>
