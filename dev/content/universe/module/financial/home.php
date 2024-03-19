@@ -223,8 +223,8 @@ if(isset($site)) {
 	// create SQL
 	$sql = '
 	SELECT *
-	FROM financial_account
-	WHERE financial_account.fiModule = :module;';
+	FROM financial_account AS account
+	WHERE account.fiModule = :module;';
 	// create Query
 	$query = $site->db->prepare($sql);
 	// bind Value
@@ -334,14 +334,14 @@ if(isset($site)) {
 		
 		// create SQL
 		$sql = '
-		SELECT YEAR(financial_account_transaction.date) AS \'year\',
-		    MONTH(financial_account_transaction.date) AS \'month\',
-		    SUM(financial_account_transaction.value) AS \'value\',
-		    SUM(financial_account_transaction.IN) AS \'IN\',
-		    SUM(financial_account_transaction.OUT) AS \'OUT\'
-		FROM financial_account_transaction
-		WHERE financial_account_transaction.fiAccount = :account
-		GROUP BY MONTH(financial_account_transaction.date)
+		SELECT YEAR(transaction.date) AS year,
+		    MONTH(transaction.date) AS month,
+		    SUM(transaction.value) AS value,
+		    SUM(transaction.IN) AS \'IN\',
+		    SUM(transaction.OUT) AS \'OUT\'
+		FROM financial_account_transaction AS transaction
+		WHERE transaction.fiAccount = :account
+		GROUP BY MONTH(transaction.date)
 		ORDER BY year DESC, month DESC;';
 		// create Query
 		$query = $site->db->prepare($sql);
