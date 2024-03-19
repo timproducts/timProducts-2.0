@@ -237,9 +237,11 @@ if(isset($site)) {
 	foreach($accounts as $account) {
 		// create SQL
 		$sql = '
-		SELECT * FROM financial_account_transaction
-		WHERE financial_account_transaction.fiAccount = :account AND YEAR(financial_account_transaction.date) = YEAR(CURRENT_DATE) AND MONTH(financial_account_transaction.date) = MONTH(CURRENT_DATE)
-		ORDER BY financial_account_transaction.date DESC;';
+		SELECT transaction.*, category.category
+		FROM financial_account_transaction AS transaction
+			LEFT JOIN financial_account_transaction_category AS category ON transaction.fiCategory = category.ID
+		WHERE transaction.fiAccount = :account AND YEAR(transaction.date) = YEAR(CURRENT_DATE) AND MONTH(transaction.date) = MONTH(CURRENT_DATE)
+		ORDER BY transaction.date DESC;';
 		// create Query
 		$query = $site->db->prepare($sql);
 		// bind Value
@@ -259,6 +261,7 @@ if(isset($site)) {
 				<th>Date</th>
 				<th>IN</th>
 				<th>OUT</th>
+				<th>Category</th>
 				<th>From/To</th>
 				<th>Description</th>
 				<th>Comment</th>
@@ -272,6 +275,7 @@ if(isset($site)) {
 					<td><?=$transaction['date']?></td>
 					<td><?=formatPrice($transaction['IN'])?></td>
 					<td><?=formatPrice($transaction['OUT'])?></td>
+					<td><?=$transaction['category']?></td>
 					<td><?=$transaction['fromto']?></td>
 					<td><?=$transaction['description']?></td>
 					<td><?=$transaction['comment']?></td>
