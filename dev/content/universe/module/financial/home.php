@@ -274,5 +274,67 @@ if(isset($site)) {
 			</tbody>
 		</table>
 		<?php
+		
+		// create SQL
+		$sql = '
+		SELECT YEAR(financial_account_transaction.date) AS \'year\',
+		    MONTH(financial_account_transaction.date) AS \'month\',
+		    SUM(financial_account_transaction.value) AS \'value\',
+		    SUM(financial_account_transaction.IN) AS \'IN\',
+		    SUM(financial_account_transaction.OUT) AS \'OUT\'
+		FROM financial_account_transaction
+		WHERE financial_account_transaction.fiAccount = :account
+		GROUP BY MONTH(financial_account_transaction.date)
+		ORDER BY year DESC, month DESC;';
+		// create Query
+		$query = $site->db->prepare($sql);
+		// bind Value
+		$query->bindValue('account', $account['ID'], PDO::PARAM_INT);
+		// execute Query
+		$query->execute();
+		// get Result
+		$transactions = $query->fetchAll();
+		?>
+		<table border="1"
+			   class="">
+			<caption>History</caption>
+			<thead>
+			<tr>
+				<th>Year</th>
+				<th>Month</th>
+				<th>Value</th>
+				<th>IN</th>
+				<th>OUT</th>
+			</tr>
+			</thead>
+			<tbody>
+			<?php
+			$totalValue = 0;
+			$totalIN = 0;
+			$totalOUT = 0;
+			foreach($transactions as $transaction) {
+				$totalValue = $totalValue + $transaction['value'];
+				$totalIN = $totalIN + $transaction['IN'];
+				$totalOUT = $totalOUT + $transaction['OUT'];
+				?>
+				<tr>
+					<td><?=$transaction['year']?></td>
+					<td><?=$transaction['month']?></td>
+					<td><?=formatPrice($transaction['value'])?></td>
+					<td><?=formatPrice($transaction['IN'])?></td>
+					<td><?=formatPrice($transaction['OUT'])?></td>
+				</tr>
+				<?php
+			}
+			?>
+			<tr>
+				<td colspan="2">Total:</td>
+				<td><?=formatPrice($totalValue)?></td>
+				<td><?=formatPrice($totalIN)?></td>
+				<td><?=formatPrice($totalOUT)?></td>
+			</tr>
+			</tbody>
+		</table>
+		<?php
 	}
 }
