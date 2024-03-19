@@ -47,6 +47,31 @@ if(isset($site)) {
 			$query->execute();
 			// get Result
 			$accounts = $query->fetchAll();
+			
+			// create SQL
+			$sql = '
+			SELECT category.ID AS category_ID, category.category AS category, sub_category.ID AS sub_category_ID, sub_category.category AS sub_category
+			FROM financial_account_transaction_category AS category
+			LEFT JOIN financial_account_transaction_category AS sub_category ON category.ID = sub_category.fiParent
+			WHERE category.fiParent IS NULL AND sub_category.fiModule = :module;';
+			// create Query
+			$query = $site->db->prepare($sql);
+			// bind Value
+			$query->bindValue('module', $site->module->ID, PDO::PARAM_INT);
+			// execute Query
+			$query->execute();
+			// get Result
+			$categories = $query->fetchAll();
+			
+			// format
+			$tmp = [];
+			foreach($categories as $category) {
+				$tmp[$category['category_ID']]['ID'] = $category['category_ID'];
+				$tmp[$category['category_ID']]['category'] = $category['category'];
+				$tmp[$category['category_ID']]['subCategory'][$category['sub_category_ID']]['ID'] = $category['sub_category_ID'];
+				$tmp[$category['category_ID']]['subCategory'][$category['sub_category_ID']]['category'] = $category['sub_category'];
+			}
+			$categories = $tmp;
 			?>
 			<form method="post"
 				  action="<?=$site->getURL(TRUE, TRUE, FALSE)?>">
@@ -72,10 +97,31 @@ if(isset($site)) {
 					</tr>
 					<tr>
 						<td><label for="financial_transaction_category">Category</label></td>
+						<!-- TODO: remove
 						<td><input type="text"
 								   id="financial_transaction_category"
 								   name="financial[add_transaction][category]"
-								   value="<?=2?>"></td>
+								   value="2"></td>-->
+						<td>
+							<select id="financial_transaction_category"
+									name="financial[add_transaction][category]">
+								<?php
+								foreach($categories as $category) {
+									?>
+									<optgroup label="<?=$category['category']?>">
+										<?php
+										foreach($category['subCategory'] as $subCategory) {
+											?>
+											<option value="<?=$subCategory['ID']?>"><?=$subCategory['category']?></option>
+											<?php
+										}
+										?>
+									</optgroup>
+									<?php
+								}
+								?>
+							</select>
+						</td>
 					</tr>
 					<tr>
 						<td><label for="financial_transaction_date">Date</label></td>
