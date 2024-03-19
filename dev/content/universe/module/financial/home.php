@@ -174,7 +174,8 @@ if(isset($site)) {
 	$sql = '
 	SELECT financial_account.ID, financial_account.account, SUM(financial_account_transaction.value) AS \'value\', SUM(financial_account_transaction.IN) AS \'IN\', SUM(financial_account_transaction.OUT) AS \'OUT\'
 	FROM financial_account
-		LEFT JOIN financial_account_transaction ON financial_account_transaction.fiAccount = financial_account.ID
+		LEFT JOIN financial_account_transaction ON financial_account_transaction.fiAccount = financial_account.ID AND
+		YEAR(financial_account_transaction.date) = YEAR(CURRENT_DATE) AND MONTH(financial_account_transaction.date) = MONTH(CURRENT_DATE)
 	WHERE financial_account.fiModule = :module GROUP BY financial_account.ID ';
 	$query = $site->db->prepare($sql);
 	$query->bindValue('module', $site->module->ID, PDO::PARAM_INT);
