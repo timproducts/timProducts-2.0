@@ -231,7 +231,7 @@ if(isset($site)) {
 		// create SQL
 		$sql = '
 		SELECT * FROM financial_account_transaction
-		WHERE financial_account_transaction.fiAccount = :account
+		WHERE financial_account_transaction.fiAccount = :account AND YEAR(financial_account_transaction.date) = YEAR(CURRENT_DATE) AND MONTH(financial_account_transaction.date) = MONTH(CURRENT_DATE)
 		ORDER BY financial_account_transaction.date DESC;';
 		// create Query
 		$query = $site->db->prepare($sql);
