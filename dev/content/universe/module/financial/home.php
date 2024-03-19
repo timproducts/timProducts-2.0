@@ -244,8 +244,10 @@ if(isset($site)) {
 		$transactions = $query->fetchAll();
 		
 		?>
-		<table border="1" class="transaction">
-			<caption>Account: <?=$account['account']?></caption>
+			<h3>Account: <?=$account['account']?></h3>
+		<table border="1"
+			   class="transaction">
+			<caption>Bank Statement</caption>
 			<thead>
 			<tr>
 				<th>Date</th>
