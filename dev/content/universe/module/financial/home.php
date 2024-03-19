@@ -38,7 +38,10 @@ if(isset($site)) {
 	switch($site->view) {
 		case 'addTransaction':
 			// create SQL
-			$sql = 'SELECT * FROM financial_account WHERE financial_account.fiModule = :module;';
+			$sql = '
+			SELECT *
+			FROM financial_account
+			WHERE financial_account.fiModule = :module;';
 			// create Query
 			$query = $site->db->prepare($sql);
 			// bind Value
@@ -52,7 +55,7 @@ if(isset($site)) {
 			$sql = '
 			SELECT category.ID AS category_ID, category.category AS category, sub_category.ID AS sub_category_ID, sub_category.category AS sub_category
 			FROM financial_account_transaction_category AS category
-			LEFT JOIN financial_account_transaction_category AS sub_category ON category.ID = sub_category.fiParent
+				LEFT JOIN financial_account_transaction_category AS sub_category ON category.ID = sub_category.fiParent
 			WHERE category.fiParent IS NULL AND sub_category.fiModule = :module;';
 			// create Query
 			$query = $site->db->prepare($sql);
@@ -218,7 +221,10 @@ if(isset($site)) {
 	</style>
 	<?php
 	// create SQL
-	$sql = 'SELECT * FROM financial_account WHERE financial_account.fiModule = :module;';
+	$sql = '
+	SELECT *
+	FROM financial_account
+	WHERE financial_account.fiModule = :module;';
 	// create Query
 	$query = $site->db->prepare($sql);
 	// bind Value
