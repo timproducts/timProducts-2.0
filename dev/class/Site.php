@@ -273,6 +273,42 @@ class Site {
 		return $return;
 	}
 	
+	/**
+	 * getBreadcrumb
+	 *
+	 * @return array
+	 */
+	public function getBreadcrumb(): array {
+		// Default Breadcrumb
+		$return = ['home' => ['title' => 'Home', 'url' => $_SERVER['SCRIPT_NAME'].$this->getURL(FALSE, FALSE, FALSE)]];
+		
+		// Universe Breadcrumb
+		if(!is_null($this->universe)) {
+			$return['universe'] = ['title' => 'Universe '.$this->universe->universe, 'url' => $_SERVER['SCRIPT_NAME'].$this->getURL(TRUE, FALSE, FALSE)];
+		}
+		
+		// Module Breadcrumb
+		if(!is_null($this->module)) {
+			$return['module'] = ['title' => 'Module '.$this->module->module, 'url' => $_SERVER['SCRIPT_NAME'].$this->getURL(TRUE, TRUE, FALSE)];
+		}
+		
+		// View Breadcrumb
+		if(!is_null($this->view)) {
+			$return['view'] = ['title' => 'View '.$this->view, 'url' => $_SERVER['SCRIPT_NAME'].$this->getURL(TRUE, TRUE, TRUE)];
+		}
+		
+		return $return;
+	}
+	
+	/* ########## F U N C T I O N ################################################################################### */
+	
+	/**
+	 * dump
+	 *
+	 * @param $all
+	 * @param string|null $tile
+	 * @return void
+	 */
 	public function dump($all, ?string $tile = null): void {
 		if(!is_null($tile)) {
 			$all = [$tile => $all];
@@ -283,40 +319,5 @@ class Site {
 		} else {
 			echo '<pre>'.print_r($all, TRUE).'</pre>';
 		}
-	}
-	
-	public function getBreadcrumb(): array {
-		$return = [
-			'home' => [
-				'title' => 'Home',
-				'url' => $_SERVER['SCRIPT_NAME'].$this->getURL2(FALSE, FALSE, FALSE)
-			]
-		];
-		
-		// Universe Parameter
-		if(!is_null($this->universe)) {
-			$return['universe'] = [
-				'title' => 'Universe '.$this->universe->universe,
-				'url' => $_SERVER['SCRIPT_NAME'].$this->getURL2(TRUE, FALSE, FALSE)
-			];
-		}
-		
-		// Module Parameter
-		if(!is_null($this->module)) {
-			$return['module'] = [
-				'title' => 'Module '.$this->module->module,
-				'url' => $_SERVER['SCRIPT_NAME'].$this->getURL2(TRUE, TRUE, FALSE)
-			];
-		}
-		
-		// View Parameter
-		if(!is_null($this->view)) {
-			$return['view'] = [
-				'title' => 'View '.$this->view,
-				'url' => $_SERVER['SCRIPT_NAME'].$this->getURL2(TRUE, TRUE, TRUE)
-			];
-		}
-		
-		return $return;
 	}
 }
