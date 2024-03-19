@@ -285,6 +285,51 @@ if(isset($site)) {
 		
 		// create SQL
 		$sql = '
+		SELECT category.ID, category.category, SUM(transaction.value) AS value, SUM(transaction.IN) AS \'IN\', SUM(transaction.OUT) AS \'OUT\'
+		FROM financial_account_transaction AS transaction
+			LEFT JOIN financial_account_transaction_category AS category ON transaction.fiCategory = category.ID
+		WHERE transaction.fiAccount = :account AND YEAR(transaction.date) = YEAR(CURRENT_DATE) AND MONTH(transaction.date) = MONTH(CURRENT_DATE)
+		GROUP BY category.ID
+		ORDER BY value DESC;';
+		// create Query
+		$query = $site->db->prepare($sql);
+		// bind Value
+		$query->bindValue('account', $account['ID'], PDO::PARAM_INT);
+		// execute Query
+		$query->execute();
+		// get Result
+		$statistics = $query->fetchAll();
+		//$site->dump($statistics);
+		?>
+		<table border="1">
+			<caption>Statistic</caption>
+			<thead>
+			<tr>
+				<th>Category</th>
+				<th>Value</th>
+				<th>IN</th>
+				<th>OUT</th>
+			</tr>
+			</thead>
+			<tbody>
+			<?php
+			foreach($statistics as $statistic) {
+				?>
+				<tr>
+					<td><?=$statistic['category']?></td>
+					<td><?=formatPrice($statistic['value'])?></td>
+					<td><?=formatPrice($statistic['IN'])?></td>
+					<td><?=formatPrice($statistic['OUT'])?></td>
+				</tr>
+				<?php
+			}
+			?>
+			</tbody>
+		</table>
+		<?php
+		
+		// create SQL
+		$sql = '
 		SELECT YEAR(financial_account_transaction.date) AS \'year\',
 		    MONTH(financial_account_transaction.date) AS \'month\',
 		    SUM(financial_account_transaction.value) AS \'value\',
