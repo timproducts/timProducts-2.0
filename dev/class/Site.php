@@ -13,6 +13,10 @@ class Site {
 	private string $dbUsername;
 	private string $dbPassword;
 	
+	public string $universeParameterName;
+	public string $moduleParameterName;
+	public string $viewParameterName;
+	
 	public bool      $login;
 	public ?User     $user;
 	public ?Universe $universe;
@@ -28,6 +32,11 @@ class Site {
 		$this->dbDatabase = $dbDatabase;
 		$this->dbUsername = $dbUsername;
 		$this->dbPassword = $dbPassword;
+		
+		$this->authenticationBypassTokenParameterName = 'auth_token';
+		$this->universeParameterName = 'universe';
+		$this->moduleParameterName = 'module';
+		$this->viewParameterName = 'view';
 		
 		$this->login = FALSE;
 		$this->universe = null;
@@ -64,9 +73,9 @@ class Site {
 		}
 	}
 	
-	public function checkAuthenticationBypassOverToken(string $tokenName): void {
-		if(isset($_GET[$tokenName])) {
-			$token = $_GET[$tokenName];
+	public function checkAuthenticationBypassOverToken(): void {
+		if(isset($_GET[$this->authenticationBypassTokenParameterName])) {
+			$token = $_GET[$this->authenticationBypassTokenParameterName];
 			// create SQL
 			$sql = 'SELECT * FROM user WHERE user.auth_token = :token;';
 			// create Query
@@ -93,12 +102,12 @@ class Site {
 		}
 	}
 	
-	public function navigate(string $universeName, string $moduleName, string $viewName): void {
+	public function navigate(): void {
 		if($this->login) {
-			if(isset($_GET[$universeName])) {
+			if(isset($_GET[$this->universeParameterName])) {
 				// get Parameter Universe
 				// TODO: check for special Chars or Hacks
-				$universeID = $_GET[$universeName];
+				$universeID = $_GET[$this->universeParameterName];
 				// set Universe
 				$this->getUniverse($universeID);
 			}
@@ -106,18 +115,18 @@ class Site {
 			if(!is_null($this->universe)) {
 				$this->content = 'universe/module/module.php';
 				
-				if(isset($_GET[$viewName])) {
+				if(isset($_GET[$this->viewParameterName])) {
 					// get Parameter View
 					// TODO: check for special Chars or Hacks
-					$view = $_GET[$viewName];
+					$view = $_GET[$this->viewParameterName];
 					// set View
 					$this->view = $view;
 				}
 				
-				if(isset($_GET[$moduleName])) {
+				if(isset($_GET[$this->moduleParameterName])) {
 					// get Parameter Module
 					// TODO: check for special Chars or Hacks
-					$moduleID = $_GET[$moduleName];
+					$moduleID = $_GET[$this->moduleParameterName];
 					// set Module
 					$this->getModule($moduleID);
 				}
