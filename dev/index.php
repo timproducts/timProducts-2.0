@@ -12,19 +12,14 @@ const DB_NAME = 'timProducts';
 const DB_USERNAME = 'timproducts';
 const DB_PASSWORD = 'timproductsSQL123***';
 
-const SITE_AUTH_TOKEN_NAME = 'auth_token';
-const SITE_UNIVERSE_NAME = 'universe';
-const SITE_MODULE_NAME = 'module';
-const SITE_VIEW_NAME = 'view';
-
 try {
 	$site = new Site(DB_HOST, DB_NAME, DB_USERNAME, DB_PASSWORD);
 
 	$site->loadDatabase();
 
-	$site->checkAuthenticationBypassOverToken(SITE_AUTH_TOKEN_NAME);
+	$site->checkAuthenticationBypassOverToken();
 
-	$site->navigate(SITE_UNIVERSE_NAME, SITE_MODULE_NAME, SITE_VIEW_NAME);
+	$site->navigate();
 } catch(Exception $exception) {
 	echo $exception->getFile().' Line: '.$exception->getLine();
 }
