@@ -2,10 +2,14 @@
 
 namespace App\class;
 
+use App\content\universe\module\financial\Financial;
 use PDO;
 use PDOException;
 
 class Site {
+	
+	/* ########## P R O P E R T Y ################################################################################### */
+	
 	/** @var PDO|null */
 	public ?PDO    $db;
 	private string $dbHost;
@@ -96,7 +100,6 @@ class Site {
 					$this->user = new User();
 					$this->user->importFromDB($user);
 					$this->login = TRUE;
-					//echo 'Authentication bypassed';
 				}
 			}
 		}
@@ -195,8 +198,20 @@ class Site {
 		$result = $query->fetchAll();
 		// check Result
 		if(count($result) === 1) {
-			$this->module = new Module();
-			$this->module->importFromDB($result[0]);
+			// TODO: check for $reslult[0]
+			$module = $result[0];
+			//$this->dump($module);
+			//exit();
+			switch($module['tag']) {
+				case 'financial':
+					$this->module = new Financial($this);
+					$this->module->importFromDB($module);
+					break;
+				default:
+					// TODO: Default Case
+			}
+//			$this->module = new Module();
+//			$this->module->importFromDB($result[0]);
 		}
 	}
 	
@@ -310,6 +325,7 @@ class Site {
 	 * @return void
 	 */
 	public function dump($all, ?string $tile = null): void {
+		// add Title/Description
 		if(!is_null($tile)) {
 			$all = [$tile => $all];
 		}
