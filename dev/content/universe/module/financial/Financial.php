@@ -8,12 +8,8 @@ use PDO;
 
 class Financial extends Module {
 	
-	private Site $site;
-	
 	public function __construct(Site $site) {
-		parent::__construct();
-		
-		$this->site = $site;
+		parent::__construct($site);
 	}
 	
 	// SQL

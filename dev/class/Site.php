@@ -2,6 +2,7 @@
 
 namespace App\class;
 
+use App\content\universe\module\file\File;
 use App\content\universe\module\financial\Financial;
 use PDO;
 use PDOException;
@@ -139,6 +140,9 @@ class Site {
 						case 'financial':
 							$this->content = 'universe/module/financial/home.php';
 							break;
+						case 'file':
+							$this->content = 'universe/module/file/home.php';
+							break;
 					}
 				}
 			} else {
@@ -200,11 +204,14 @@ class Site {
 		if(count($result) === 1) {
 			// TODO: check for $reslult[0]
 			$module = $result[0];
-			//$this->dump($module);
-			//exit();
+			
 			switch($module['tag']) {
 				case 'financial':
 					$this->module = new Financial($this);
+					$this->module->importFromDB($module);
+					break;
+				case 'file':
+					$this->module = new File($this);
 					$this->module->importFromDB($module);
 					break;
 				default:
@@ -321,13 +328,13 @@ class Site {
 	 * dump
 	 *
 	 * @param $all
-	 * @param string|null $tile
+	 * @param string|null $title
 	 * @return void
 	 */
-	public function dump($all, ?string $tile = null): void {
+	public function dump($all, ?string $title = null): void {
 		// add Title/Description
-		if(!is_null($tile)) {
-			$all = [$tile => $all];
+		if(!is_null($title)) {
+			$all = [$title => $all];
 		}
 		
 		if(is_null($all)) {

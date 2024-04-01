@@ -3,11 +3,13 @@
 namespace App\class;
 
 class Module {
+	protected Site $site;
 	public ?int $ID;
 	public ?string $module;
 	public ?string $tag;
 	
-	public function __construct() {
+	public function __construct(Site $site) {
+		$this->site = $site;
 		$this->ID = null;
 		$this->module = null;
 		$this->tag = null;

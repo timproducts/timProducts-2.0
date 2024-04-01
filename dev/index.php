@@ -7,6 +7,7 @@ require 'class/User.php';
 require 'class/Universe.php';
 require 'class/Module.php';
 require 'content/universe/module/financial/Financial.php';
+require 'content/universe/module/file/File.php';
 
 const DB_HOST = 'localhost';
 const DB_NAME = 'timProducts';
