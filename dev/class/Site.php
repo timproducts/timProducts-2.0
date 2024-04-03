@@ -4,6 +4,7 @@ namespace App\class;
 
 use App\content\universe\module\file\File;
 use App\content\universe\module\financial\Financial;
+use App\content\universe\module\item\Item;
 use PDO;
 use PDOException;
 
@@ -143,6 +144,9 @@ class Site {
 						case 'file':
 							$this->content = 'universe/module/file/home.php';
 							break;
+						case 'item':
+							$this->content = 'universe/module/item/home.php';
+							break;
 					}
 				}
 			} else {
@@ -212,6 +216,10 @@ class Site {
 					break;
 				case 'file':
 					$this->module = new File($this);
+					$this->module->importFromDB($module);
+					break;
+				case 'item':
+					$this->module = new Item($this);
 					$this->module->importFromDB($module);
 					break;
 				default:
